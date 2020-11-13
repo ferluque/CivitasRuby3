@@ -288,7 +288,15 @@ module Civitas
     end
     
     def vender (ip)
-      
+      if (!@encarcelado && existe_la_propiedad(ip))
+        if (@propiedades[ip].vender(self))
+          evento = @nombre + " ha vendido la propiedad " + @propiedades[ip].nombre
+          Diario.instance.ocurre_evento(evento)
+          @propiedades.delete(@propiedades[ip])
+          return true
+        end
+      end
+      return false
     end
     
     def to_s
