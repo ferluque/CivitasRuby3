@@ -16,13 +16,13 @@ module Civitas
     @@precio_libertad = 200.0
     @@saldo_inicial = 7500.0
     
-    def initialize (name, encarcelado = false, num_casilla_actual=0, puede_comprar=false, saldo=0.0, propiedades=[])
+    def initialize (name)
       @nombre = name
-      @encarcelado = encarcelado
-      @num_casilla_actual = num_casilla_actual
-      @puede_comprar = puede_comprar
-      @saldo = saldo
-      @propiedades = propiedades
+      @encarcelado = false
+      @num_casilla_actual = 0
+      @puede_comprar = false
+      @saldo = @@saldo_inicial
+      @propiedades = []
     end
     
     def constr_copia (otro)
@@ -30,10 +30,24 @@ module Civitas
     end
     
     ######################
-    
-    #Prácticas posteriores
+
     def cancelar_hipoteca (ip)
-      
+      result = false
+      if (@encarcelado)
+        return result
+      end
+      if (existe_la_propiedad(ip))
+        propiedad = @propiedades[ip]
+        cantidad = propiedad.get_importe_cancelar_hipoteca
+        puedo_castar = puedo_gastar(cantidad)
+        if (puedo_gastar)
+          result = propiedad.cancelar_hipoteca(self)
+          if (result)
+            Diario.instance.ocurre_evento("El jugador " + @nombre + " cancela la hipoteca de la propiedad "+ propiedad.nombre)
+          end
+        end
+      end
+      return result
     end
     
     def cantidad_casas_hoteles 
@@ -46,22 +60,76 @@ module Civitas
       return cantidad
     end
     
-    def compare_to (otro)
-      return Float.compare(@saldo, otro.saldo)
+    def <=> (otro)
+      return @saldo<=> otro.saldo
     end
     
     #Prácticas posteriores
     def comprar (titulo)
-      
+      result = false
+      if (@encarcelado)
+        return result
+      end
+      if (@puede_comprar)
+        if (puedo_gastar(titulo.precio_compra))
+          result = titulo.comprar(self)
+          if (result)
+            @propiedades.push(titulo)
+            Diario.instance.ocurre_evento("El jugador "+@nombre+" compra la propiedad "+titulo.nombre)
+          end
+          puede_comprar = false;
+        end
+      end
+      return result
     end
     def construir_casa (ip)
+      result = false
+      if (@encarcelado)
+        return result
+      else
+        existe = existe_la_propiedad(ip)
+      end
+      if (existe)
+        propiedad = @propiedades[ip]
+        if (puedo_edificar_casa(propiedad))
+          result = propiedad.construir_casa(self)
+          if (result)
+            Diario.instance.ocurre_evento("El jugador " + @nombre + " construye una casa en la propiedad " + propiedad.nombre)
+          end
+        end
+      end
       
     end
+    
     def construir_hotel (ip)
-      
+      result = false
+      if (@encarcelado)
+        return result
+      end
+      if (existe_la_propiedad(ip))
+        propiedad = @propiedades[ip]
+        if (puedo_edificar_hotel(propiedad))
+          result = propiedad.construir_hotel(self)
+          casas_x_hotel = @@casas_por_hotel
+          propiedad.derruir_casas(casas_x_hotel, self)
+          Diario.instance.ocurre_evento("El jugador "+@nombre+" construye un hotel en la propiedad "+propiedad.nombre)
+        end
+      end
+      return result
     end
+    
     def hipotecar (ip)
-      
+      result = false
+      if (@encarcelado)
+        return result
+      end
+      if (existe_la_propiedad(ip))
+        propiedad = @propiedades[ip]
+        result = propiedad.hipotecar(self)
+        if (result)
+          Diario.instance.ocurre_evento("El jugador "+@nombre+" hipoteca la propiedad "+propiedad.nombre)
+        end
+      end
     end
     
     private
@@ -220,7 +288,15 @@ module Civitas
     end
     
     def vender (ip)
-      
+      if (!@encarcelado && existe_la_propiedad(ip))
+        if (@propiedades[ip].vender(self))
+          evento = @nombre + " ha vendido la propiedad " + @propiedades[ip].nombre
+          Diario.instance.ocurre_evento(evento)
+          @propiedades.delete(@propiedades[ip])
+          return true
+        end
+      end
+      return false
     end
     
     def to_s

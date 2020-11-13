@@ -2,10 +2,14 @@
 # To change this template file, choose Tools | Templates
 # and open the template in the editor.
 
-module Civitas
-  module Respuestas
-    SI = :SI
-    NO = :NO
-  end
-end
 
+module Civitas
+  module Salidas_carcel
+    PAGANDO = :PAGANDO
+    TIRANDO = :TIRANDO
+  end
+  
+  lista_Salidas = [Salidas_carcel::PAGANDO, Salidas_carcel::TIRANDO]
+
+  
+end

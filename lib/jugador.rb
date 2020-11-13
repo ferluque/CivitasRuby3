@@ -16,13 +16,13 @@ module Civitas
     @@precio_libertad = 200.0
     @@saldo_inicial = 7500.0
     
-    def initialize (name, encarcelado = false, num_casilla_actual=0, puede_comprar=false, saldo=0.0, propiedades=[])
+    def initialize (name)
       @nombre = name
-      @encarcelado = encarcelado
-      @num_casilla_actual = num_casilla_actual
-      @puede_comprar = puede_comprar
-      @saldo = saldo
-      @propiedades = propiedades
+      @encarcelado = false
+      @num_casilla_actual = 0
+      @puede_comprar = false
+      @saldo = @@saldo_inicial
+      @propiedades = []
     end
     
     def constr_copia (otro)
@@ -60,8 +60,8 @@ module Civitas
       return cantidad
     end
     
-    def compare_to (otro)
-      return Float.compare(@saldo, otro.saldo)
+    def <=> (otro)
+      return @saldo<=> otro.saldo
     end
     
     #Prácticas posteriores

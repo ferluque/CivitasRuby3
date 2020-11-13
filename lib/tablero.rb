@@ -49,7 +49,7 @@ module Civitas
     end
     
     def get_casilla (numCasilla)
-      return @casillas.get(numCasilla)
+      return @casillas[numCasilla]
     end
     
     def get_casillas

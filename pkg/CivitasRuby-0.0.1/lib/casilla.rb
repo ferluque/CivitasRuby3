@@ -22,11 +22,11 @@ module Civitas
     end
     
     def self.new_descanso (name)
-      new(name, nil, Civitas::Tipo_casilla::DESCANSO, -1, nil)      
+      new(name, Civitas::Tipo_casilla::DESCANSO, nil, -1, nil)      
     end
     
     def self.new_calle (titulo)
-      new("", Civitas::Tipo_casilla::CALLE, titulo, -1, nil)
+      new(titulo.nombre, Civitas::Tipo_casilla::CALLE, titulo, -1, nil)
     end
     
     def self.new_impuesto(cantidad, name)
@@ -43,7 +43,7 @@ module Civitas
     
     private
     def informe (actual, todos)
-      Diario.Instance.ocurre_evento("El jugador "+todos[actual].nombre+" ha caido en la casilla "+nombre)
+      Diario.instance.ocurre_evento("El jugador "+todos[actual].nombre+" ha caido en la casilla "+ @nombre)
     end
     
     public
@@ -51,10 +51,30 @@ module Civitas
       return (actual>=0 && actual<todos.size())
     end
     
+    def recibe_jugador (actual, todos)
+      case @tipo
+      when Civitas::Tipo_casilla::CALLE
+        recibe_jugador_calle(actual, todos)
+      when Civitas::Tipo_casilla::IMPUESTO
+        recibe_jugador_impuesto(actual,todos)
+      when Civitas::Tipo_casilla::JUEZ
+        recibe_jugador_juez(actual, todos)
+      when Civitas::Tipo_casilla::SORPRESA
+        recibe_jugador_sorpresa(actual, todos)
+      end
+      informe(actual, todos)
+    end
+    
     private
-    # A implementar posteriormente
     def recibe_jugador_calle (actual, todos)
-      
+      if (jugador_correcto(actual, todos))
+        informe(actual, todos)
+        if (!@titulo_propiedad.tiene_propietario)
+          todos[actual].puede_comprar_casilla;
+        else
+          @titulo_propiedad.tramitar_alquiler(todos[actual])
+        end
+      end
     end
     
     def recibe_jugador_impuesto (actual, todos)
@@ -71,14 +91,17 @@ module Civitas
       end
     end
     
-    # A implementar posteriormente
     def recibe_jugador_sopresa(actual, todos)
-      
+      if (jugador_correcto(actual, todos))
+        sorpresa = @mazo.siguiente
+        informe(actual, todos)
+        sorpresa.aplicar_a_jugador(actual, todos)
+      end
     end
     
     public
     def to_s
-      devolver = "Casilla{" + "importe=" + @importe.to_s + ", nombre=" + @nombre + ", tipo=" + @tipo.to_s + ", titulo_propiedad=" + @titulo_propiedad.to_s + ", sorpresa=" + @sorpresa.to_s + ", mazo=" + @mazo.to_s + '}'
+      devolver = "Casilla{nombre=" + @nombre + ", importe=" + @importe.to_s + ", tipo=" + @tipo.to_s + ", titulo_propiedad=" + @titulo_propiedad.to_s + ", sorpresa=" + @sorpresa.to_s + ", mazo=" + @mazo.to_s + '}'
       return devolver
     end
       

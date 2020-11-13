@@ -40,7 +40,7 @@ module Civitas
   
     def set_debug (d)
       @debug = d
-      Diario.Instance.ocurre_evento("Metodo debug " + d.to_s)
+      Diario.instance.ocurre_evento("Metodo debug " + d.to_s)
     end
     
     def self.prueba 
