@@ -57,7 +57,7 @@ module Civitas
     end
     
     def nueva_posicion (actual, tirada)
-      if (!@correcto)
+      if (!correcto_noargs)
         return -1
       else
         if ((actual+tirada)>@casillas.size)

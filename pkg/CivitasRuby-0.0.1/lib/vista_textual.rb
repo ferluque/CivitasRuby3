@@ -60,10 +60,9 @@ module JuegoTexto
 
     
     def comprar
-      lista_respuestas=[Civitas::Respuestas::SI, Civitas::Respuestas::NO]
       opcion = menu("¿Deseas comprar la calle a la que has llegado? ",
               ["SI", "NO"]);
-            return lista_respuestas[opcion]
+            return Civitas::Lista_respuestas[opcion]
     end
 
     def gestionar

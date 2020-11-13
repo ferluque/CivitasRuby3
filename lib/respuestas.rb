@@ -6,6 +6,10 @@ module Civitas
   module Respuestas
     SI = :SI
     NO = :NO
+    
+    
   end
+  Lista_respuestas=[Civitas::Respuestas::SI, Civitas::Respuestas::NO]
+
 end
 
