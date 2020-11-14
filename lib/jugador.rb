@@ -72,7 +72,9 @@ module Civitas
       end
       if (@puede_comprar)
         if (puedo_gastar(titulo.precio_compra))
+          puts "Puedo gastar"
           result = titulo.comprar(self)
+          puts "Resultado comprar " + result.to_s
           if (result)
             @propiedades.push(titulo)
             Diario.instance.ocurre_evento("El jugador "+@nombre+" compra la propiedad "+titulo.nombre)
@@ -82,6 +84,7 @@ module Civitas
       end
       return result
     end
+    
     def construir_casa (ip)
       result = false
       if (@encarcelado)

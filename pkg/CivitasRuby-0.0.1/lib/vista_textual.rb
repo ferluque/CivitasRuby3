@@ -48,7 +48,7 @@ module JuegoTexto
       puts titulo
       index = 0
       lista.each { |l|
-        puts tab+index.to_s+"-"+l
+        puts tab+index.to_s+"-"+l.to_s
         index += 1
       }
 
@@ -61,14 +61,15 @@ module JuegoTexto
     
     def comprar
       opcion = menu("¿Deseas comprar la calle a la que has llegado? ",
-              ["SI", "NO"]);
-            return Civitas::Lista_respuestas[opcion]
+        ["SI", "NO"]);
+      respuesta = Civitas::Lista_respuestas[opcion]
+      return respuesta
     end
 
     def gestionar
       gestiones = []
-      lista_gestiones.lenght.times do |i|
-        gestiones.push(lista_gestiones[i])
+      Civitas::Lista_gestiones.size.times do |i|
+        gestiones.push(Civitas::Lista_gestiones[i])
       end
       
       opcion = menu("¿Que gestion inmobiliaria desea realizar?", gestiones)
@@ -112,7 +113,7 @@ module JuegoTexto
 
     def salirCarcel
       int opcion = menu("Elige la forma para intentar salir de la carcel: ",
-                    ["Pagando", "Tirando el dado"])
+        ["Pagando", "Tirando el dado"])
       return lista_salidas[opcion]
     end
     

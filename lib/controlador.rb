@@ -39,7 +39,9 @@ module JuegoTexto
           if (!@juego.final_del_juego)
             if (operacion == Civitas::Operaciones_juego::COMPRAR)
               respuesta = @vista.comprar
+              puts "Respuesta = " + respuesta.to_s
               if (respuesta == Civitas::Respuestas::SI)
+                puts "Se compra"
                 @juego.comprar
               end
               @juego.siguiente_paso_completado(operacion)
@@ -47,8 +49,8 @@ module JuegoTexto
             
             if (operacion == Civitas::Operaciones_juego::GESTIONAR)
               @vista.gestionar
-              gestion = lista_gestiones[@vista.gestion]
-              ip = @vista.propiedad
+              gestion = Civitas::Lista_gestiones[@vista.getGestion]
+              ip = @vista.getPropiedad
               op_inm = OperacionInmobiliaria.new(gestion, ip)
               
               if (op_inm.gestion == Civitas::Gestiones_inmobiliarias::CANCELAR_HIPOTECA)

@@ -6,7 +6,7 @@ module Civitas
   class CivitasJuego
     def initialize (nombres)
       @jugadores = []
-      for i in 0...nombres.size
+      nombres.size.times do |i|
         @jugadores.push(Jugador.new(nombres[i]))
       end
     
@@ -25,16 +25,17 @@ module Civitas
     private
     def avanza_jugador
       jugador_actual = @jugadores[@indice_jugador_actual]
+      puts "Jugador actual: "+jugador_actual.nombre
       posicion_actual = jugador_actual.num_casilla_actual
       tirada = Dado.instance.tirar
-      puts "Tirada: " + tirada.to_s
       posicion_nueva = @tablero.nueva_posicion(posicion_actual, tirada)
-      puts "Posicion nueva: " + posicion_nueva.to_s
       casilla = @tablero.get_casilla(posicion_nueva)
       contabilizar_pasos_por_salida(jugador_actual)
       jugador_actual.mover_a_casilla(posicion_nueva)
       casilla.recibe_jugador(posicion_actual, @jugadores)
       contabilizar_pasos_por_salida(jugador_actual)
+      puts "Estado jugador despues de ser recibido por casilla: "
+      puts jugador_actual.to_s
     end
   
     public
