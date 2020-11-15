@@ -60,7 +60,7 @@ module Civitas
       when Civitas::Tipo_casilla::JUEZ
         recibe_jugador_juez(actual, todos)
       when Civitas::Tipo_casilla::SORPRESA
-        recibe_jugador_sorpresa(actual, todos)
+        recibe_jugador_sopresa(actual, todos)
       end
       informe(actual, todos)
     end
@@ -70,7 +70,7 @@ module Civitas
       if (jugador_correcto(actual, todos))
         informe(actual, todos)
         if (!@titulo_propiedad.tiene_propietario)
-          todos[actual].puede_comprar_casilla;
+          todos[actual].puede_comprar_casilla
         else
           @titulo_propiedad.tramitar_alquiler(todos[actual])
         end

@@ -39,7 +39,7 @@ module Civitas
       if (existe_la_propiedad(ip))
         propiedad = @propiedades[ip]
         cantidad = propiedad.get_importe_cancelar_hipoteca
-        puedo_castar = puedo_gastar(cantidad)
+        puedo_gastar = puedo_gastar(cantidad)
         if (puedo_gastar)
           result = propiedad.cancelar_hipoteca(self)
           if (result)
@@ -72,14 +72,12 @@ module Civitas
       end
       if (@puede_comprar)
         if (puedo_gastar(titulo.precio_compra))
-          puts "Puedo gastar"
           result = titulo.comprar(self)
-          puts "Resultado comprar " + result.to_s
           if (result)
             @propiedades.push(titulo)
             Diario.instance.ocurre_evento("El jugador "+@nombre+" compra la propiedad "+titulo.nombre)
           end
-          puede_comprar = false;
+          @puede_comprar = false;
         end
       end
       return result
@@ -171,7 +169,11 @@ module Civitas
     public
     def modificar_saldo (cantidad)
       @saldo += cantidad
-      Diario.instance.ocurre_evento("Se aniaden " + cantidad.to_s + " al saldo del jugador " + @nombre)
+      if (cantidad > 0)
+        Diario.instance.ocurre_evento("Se aniaden "+ cantidad.to_s + " al saldo del jugador " + @nombre)
+      else
+        Diario.instance.ocurre_evento("Se retiran " + (-cantidad).to_s + " al saldo del jugador "+ @nombre)
+      end
       return true
     end
     
@@ -230,6 +232,7 @@ module Civitas
     public
     def puede_comprar_casilla
       @puede_comprar = !@encarcelado
+      puts "Estado puede_comprar = " + @puede_comprar.to_s
       return @puede_comprar
     end
     
@@ -239,13 +242,19 @@ module Civitas
     end
     
     def puedo_edificar_casa (propiedad)
-      assert(@propiedades.include?(propiedad))
-      return puedo_gastar(propiedad.precio_edificar)
+      result = false
+      if (@propiedades.include?(propiedad))
+        result = puedo_gastar(propiedad.precio_edificar)
+      end
+      return result
     end
     
     def puedo_edificar_hotel (propiedad)
-      assert(@propiedades.include?(propiedad))
-      return (puedo_edificar_casa(propiedad) && propiedad.num_casas >= 4)
+      result = false
+      if (@propiedades.include?(propiedad))
+        result = (puedo_edificar_casa(propiedad)&&propiedad.num_casas==4)
+      end
+      return result
     end
     
     def puedo_gastar(precio)

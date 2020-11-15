@@ -4,6 +4,7 @@
 
 module Civitas
   class CivitasJuego
+    attr_reader :estado
     def initialize (nombres)
       @jugadores = []
       nombres.size.times do |i|
@@ -25,17 +26,16 @@ module Civitas
     private
     def avanza_jugador
       jugador_actual = @jugadores[@indice_jugador_actual]
-      puts "Jugador actual: "+jugador_actual.nombre
+      puts "El jugador " + jugador_actual.nombre + " avanza"
+
       posicion_actual = jugador_actual.num_casilla_actual
       tirada = Dado.instance.tirar
       posicion_nueva = @tablero.nueva_posicion(posicion_actual, tirada)
       casilla = @tablero.get_casilla(posicion_nueva)
       contabilizar_pasos_por_salida(jugador_actual)
       jugador_actual.mover_a_casilla(posicion_nueva)
-      casilla.recibe_jugador(posicion_actual, @jugadores)
+      casilla.recibe_jugador(@indice_jugador_actual, @jugadores)
       contabilizar_pasos_por_salida(jugador_actual)
-      puts "Estado jugador despues de ser recibido por casilla: "
-      puts jugador_actual.to_s
     end
   
     public
@@ -155,7 +155,10 @@ module Civitas
       if (operacion == Civitas::Operaciones_juego::PASAR_TURNO)
         pasar_turno
         siguiente_paso_completado(operacion)
-      else if (operacion == Civitas::Operaciones_juego::AVANZAR)
+        puts "Entra en pasar turno"
+      else 
+        if (operacion == Civitas::Operaciones_juego::AVANZAR)
+          puts "Entra en avanzar"
           avanza_jugador
           siguiente_paso_completado(operacion)
         end
