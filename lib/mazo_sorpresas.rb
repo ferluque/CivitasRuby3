@@ -10,7 +10,7 @@ module Civitas
       init
       @debug = d
       if (@debug)
-        Diario.ocurre_evento("Modo debug activado")
+        Diario.ocurre_evento("Modo debug del mazo activado")
       end
       @cartas_especiales = []
       @ultima_sorpresa
@@ -33,6 +33,7 @@ module Civitas
     
     def siguiente 
       if ((!@barajado || (@sorpresas.size == @usadas)) && !@debug)
+        puts "Se baraja el mazo"
         @barajada = true
         @usadas = 0
         @sorpresas.shuffle

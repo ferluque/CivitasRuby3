@@ -139,7 +139,7 @@ module Civitas
       if (!@encarcelado)
         if (tiene_salvoconducto)
           perder_salvoconducto
-          Diario.Instance.ocurre_evento("Jugador "+ @nombre + " se libra de la carcel")
+          Diario.instance.ocurre_evento("Jugador "+ @nombre + " se libra de la carcel")
         else
           resultado = true
         end
@@ -232,13 +232,12 @@ module Civitas
     public
     def puede_comprar_casilla
       @puede_comprar = !@encarcelado
-      puts "Estado puede_comprar = " + @puede_comprar.to_s
       return @puede_comprar
     end
     
     private
     def puede_salir_carcel_pagando
-      return @saldo >= @@precio_por_libertad
+      return @saldo >= @@precio_libertad
     end
     
     def puedo_edificar_casa (propiedad)
@@ -275,18 +274,20 @@ module Civitas
     end
     
     def salir_carcel_pagando 
-      if (@encarcelado && puede_salir_carcel_pagando())
+      if (@encarcelado && puede_salir_carcel_pagando)
+        @encarcelado = false
         paga (@@precio_libertad)
-        Diario.Instance.ocurre_evento("El jugador " + @nombre + " paga " + @@PrecioLibertad + " por salir de la carcel")
+        Diario.instance.ocurre_evento("El jugador " + @nombre + " paga " + @@precio_libertad.to_s + " por salir de la carcel")
         return true
       end
       return false
     end
     
     def salir_carcel_tirando
-      if (@encarcelado && Dado.Instance.salgo_de_la_carcel())
+      puts "Se va a intentar salir tirando"
+      if (@encarcelado && Dado.instance.salgo_de_la_carcel())
         @encarcelado = false
-        Diario.Instance.ocurre_evento("El jugador " + @nombre + " sale de la carcel tirando el dado")
+        Diario.instance.ocurre_evento("El jugador " + @nombre + " sale de la carcel tirando el dado")
       end
       return !@encarcelado
     end

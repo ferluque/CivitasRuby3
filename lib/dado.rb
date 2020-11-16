@@ -15,7 +15,6 @@ module Civitas
     @@salida_carcel = 5
     private
     def initialize
-      @random
       @ultimo_resultado = 0
       @debug = false
     end
@@ -31,7 +30,12 @@ module Civitas
     end
   
     def salgo_de_la_carcel
-      return (tirar() == @@salida_carcel)
+      estado_anterior = @debug
+      @debug = false
+      @ultimo_resultado = tirar
+      @debug = estado_anterior
+
+      return (@ultimo_resultado == @@salida_carcel)
     end
   
     def quien_empieza (jugadores)

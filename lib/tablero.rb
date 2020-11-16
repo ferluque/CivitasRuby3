@@ -61,7 +61,7 @@ module Civitas
         return -1
       else
         if ((actual+tirada)>@casillas.size)
-          @porsalida+=1
+          @por_salida+=1
         end
         return (actual+tirada)%@casillas.size
       end
@@ -77,6 +77,12 @@ module Civitas
     
     def to_s 
       return "Tablero{" + "num_casilla_carcel=" + @num_casilla_carcel.to_s + "casillas=" + "array" + ", por_salida=" + @por_salida.to_s + ", tiene_juez=" + @tiene_juez.to_s + "}"
+    end
+    
+    def mostrar_legible
+      @casillas.size.times do |i|
+        puts i.to_s + " " + @casillas[i].to_s
+      end
     end
     
     def self.prueba

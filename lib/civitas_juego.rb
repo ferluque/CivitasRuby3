@@ -21,18 +21,17 @@ module Civitas
     
       inicializar_mazo_sorpresas (@tablero)
       inicializar_tablero(@mazo)    
+      @tablero.mostrar_legible
     end
   
     private
     def avanza_jugador
       jugador_actual = @jugadores[@indice_jugador_actual]
-      puts "El jugador " + jugador_actual.nombre + " avanza"
 
       posicion_actual = jugador_actual.num_casilla_actual
       tirada = Dado.instance.tirar
       posicion_nueva = @tablero.nueva_posicion(posicion_actual, tirada)
       casilla = @tablero.get_casilla(posicion_nueva)
-      contabilizar_pasos_por_salida(jugador_actual)
       jugador_actual.mover_a_casilla(posicion_nueva)
       casilla.recibe_jugador(@indice_jugador_actual, @jugadores)
       contabilizar_pasos_por_salida(jugador_actual)
@@ -155,10 +154,8 @@ module Civitas
       if (operacion == Civitas::Operaciones_juego::PASAR_TURNO)
         pasar_turno
         siguiente_paso_completado(operacion)
-        puts "Entra en pasar turno"
       else 
         if (operacion == Civitas::Operaciones_juego::AVANZAR)
-          puts "Entra en avanzar"
           avanza_jugador
           siguiente_paso_completado(operacion)
         end

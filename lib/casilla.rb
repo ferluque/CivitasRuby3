@@ -9,36 +9,40 @@ module Civitas
     
     attr_reader :nombre, :titulo_propiedad
     
-    @@carcel = -1
+    @@carcel = 10
 
-    def initialize (nombre, tipo, titulo, num_casilla_carcel, mazo, importe = 0)
+    def initialize (nombre, tipo, titulo, mazo, importe = 0)
       @nombre = nombre
       @tipo = tipo
       @titulo_propiedad = titulo
       @importe = importe
-      @@carcel = num_casilla_carcel
       @mazo = mazo
       @sorpresa = nil
     end
     
+    def getCarcel
+      return @@carcel
+    end
+    
     def self.new_descanso (name)
-      new(name, Civitas::Tipo_casilla::DESCANSO, nil, -1, nil)      
+      new(name, Civitas::Tipo_casilla::DESCANSO, nil, nil)      
     end
     
     def self.new_calle (titulo)
-      new(titulo.nombre, Civitas::Tipo_casilla::CALLE, titulo, -1, nil)
+      new(titulo.nombre, Civitas::Tipo_casilla::CALLE, titulo, nil)
     end
     
     def self.new_impuesto(cantidad, name)
-      new(name, Civitas::Tipo_casilla::IMPUESTO, nil, -1, nil, cantidad)
+      new(name, Civitas::Tipo_casilla::IMPUESTO, nil, nil, cantidad)
     end
     
     def self.new_juez(num_casilla_carcel, name)
-      new(name, Civitas::Tipo_casilla::JUEZ, nil, num_casilla_carcel, nil)
+      @@carcel = num_casilla_carcel
+      new(name, Civitas::Tipo_casilla::JUEZ, nil, nil)
     end
     
     def self.new_sorpresa(mazo, name)
-      new(name, Civitas::Tipo_casilla::SORPRESA, nil, -1, mazo)
+      new(name, Civitas::Tipo_casilla::SORPRESA, nil, mazo)
     end
     
     private

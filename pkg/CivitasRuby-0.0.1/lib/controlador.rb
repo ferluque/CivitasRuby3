@@ -18,7 +18,7 @@ module JuegoTexto
             
       while (!@juego.final_del_juego)
         @vista.actualizarVista
-        # @vista.pausa
+        @vista.pausa
         
         operacion = @juego.siguiente_paso
                     

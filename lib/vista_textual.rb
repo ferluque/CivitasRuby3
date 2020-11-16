@@ -112,9 +112,9 @@ module JuegoTexto
     end
 
     def salirCarcel
-      int opcion = menu("Elige la forma para intentar salir de la carcel: ",
+      opcion = menu("Elige la forma para intentar salir de la carcel: ",
         ["Pagando", "Tirando el dado"])
-      return lista_salidas[opcion]
+      return Civitas::Lista_salidas[opcion]
     end
     
   end
