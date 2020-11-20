@@ -36,7 +36,7 @@ module Civitas
         puts "Se baraja el mazo"
         @barajada = true
         @usadas = 0
-        @sorpresas.shuffle
+        @sorpresas.shuffle!
       end
       @usadas += 1
       @ultima_sorpresa = @sorpresas.shift

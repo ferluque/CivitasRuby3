@@ -78,13 +78,7 @@ module Civitas
     def to_s 
       return "Tablero{" + "num_casilla_carcel=" + @num_casilla_carcel.to_s + "casillas=" + "array" + ", por_salida=" + @por_salida.to_s + ", tiene_juez=" + @tiene_juez.to_s + "}"
     end
-    
-    def mostrar_legible
-      @casillas.size.times do |i|
-        puts i.to_s + " " + @casillas[i].to_s
-      end
-    end
-    
+
     def self.prueba
       puts "Constructor: "
       tablero = Tablero.new(10)

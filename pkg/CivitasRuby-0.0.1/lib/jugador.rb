@@ -153,7 +153,7 @@ module Civitas
     end
     
     def encarcelar (num_casilla_carcel)
-      if (debe_ser_encarcelado())
+      if (debe_ser_encarcelado)
         mover_a_casilla(num_casilla_carcel)
         @encarcelado = true
         Diario.instance.ocurre_evento("El jugador " + @nombre + " es encarcelado")
@@ -226,7 +226,7 @@ module Civitas
     private
     def perder_salvoconducto
       @salvoconducto.usada
-      @salvoconducto = 0
+      @salvoconducto = nil
     end
     
     public
@@ -297,7 +297,7 @@ module Civitas
     end
     
     def tiene_salvoconducto 
-      return (@salvconducto != nil)
+      return (@salvoconducto != nil)
     end
     
     def vender (ip)

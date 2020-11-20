@@ -21,7 +21,6 @@ module Civitas
     
       inicializar_mazo_sorpresas (@tablero)
       inicializar_tablero(@mazo)    
-      @tablero.mostrar_legible
     end
   
     private
